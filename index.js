@@ -15,9 +15,8 @@ mongoose
   .then(() => {
     console.log("MongoDB successfully connected.");
   })
-  .catch((e) => console.error(`Could not connect: ${e.message}`))
-  .then((i) => {
-    server.listen(port, () => {
-      console.log(`Server running on port ${port}`);
-    });
-  });
+  .catch((e) => console.error(`Could not connect: ${e.message}`));
+
+server.listen(port, () => {
+  console.log(`Server running on port ${port}`);
+});
