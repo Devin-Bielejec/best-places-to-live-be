@@ -1,5 +1,4 @@
 require("dotenv").config();
-checkConfig();
 const mongoose = require("mongoose");
 const keys = require("./config/keys");
 const server = require('./server');
