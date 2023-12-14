@@ -2,7 +2,7 @@
 
 module.exports = {
   mongodb: {
-    dbURI: `mongodb://${process.env.MONGO_USERNAME}:${process.env.MONGO_PASSWORD}@${process.env.MONGO_HOSTNAME}:${process.env.MONGO_PORT}/${process.env.MONGO_DB}`
+    dbURI: `process.env.MONGO_URI`
   },
   session: {
     cookieKey: process.env.COOKIE_KEY
