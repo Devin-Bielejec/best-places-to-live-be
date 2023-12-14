@@ -30,18 +30,18 @@ if (credentials) {
 
 
 
-function checkConfig() {
-  if (
-    !process.env.GOOGLE_CLIENTID ||
-    !process.env.GOOGLE_CLIENTSECRET ||
-    !process.env.FACEBOOK_CLIENTID ||
-    !process.env.FACEBOOK_CLIENTSECRET ||
-    !process.env.MONGO_USERNAME ||
-    !process.env.MONGO_PASSWORD ||
-    !process.env.MONGO_HOSTNAME ||
-    !process.env.MONGO_PORT ||
-    !process.env.MONGO_DB ||
-    !process.env.COOKIE_KEY
-  )
-    throw "You must have the appropriate *.env File to launch this project.";
-}
+// function checkConfig() {
+//   if (
+//     !process.env.GOOGLE_CLIENTID ||
+//     !process.env.GOOGLE_CLIENTSECRET ||
+//     !process.env.FACEBOOK_CLIENTID ||
+//     !process.env.FACEBOOK_CLIENTSECRET ||
+//     !process.env.MONGO_USERNAME ||
+//     !process.env.MONGO_PASSWORD ||
+//     !process.env.MONGO_HOSTNAME ||
+//     !process.env.MONGO_PORT ||
+//     !process.env.MONGO_DB ||
+//     !process.env.COOKIE_KEY
+//   )
+//     throw "You must have the appropriate *.env File to launch this project.";
+// }
