@@ -398,7 +398,7 @@ router.post("/ds",async (req, res) => {
   async function getUser(inputData) {
     try {
       const response = await axios.post(
-        "https://best-places-api.herokuapp.com/api",
+        "https://best-places-to-live-ds-leo-dunns-projects.vercel.app/api",
         inputData
       );
       return response.data;
@@ -437,7 +437,7 @@ router.post("/visual", async (req, res) => {
     try {
       const response = await axios({
         method: "post",
-        url: "https://best-places-api.herokuapp.com/visual",
+        url: "https://best-places-to-live-ds-leo-dunns-projects.vercel.app/visual",
         data: inputData,
         responseType: "arraybuffer"
       });
@@ -477,7 +477,7 @@ router.post("/spec-ds", tokenAuthentication, async (req, res) => {
   async function getUser(inputData) {
     try {
       const response = await axios.post(
-        "https://best-places-api.herokuapp.com/api",
+        "https://best-places-to-live-ds-leo-dunns-projects.vercel.app/api",
         inputData
       );
       return response.data;
