@@ -1,7 +1,7 @@
 require("dotenv").config();
 const mongoose = require("mongoose");
 const keys = require("./config/keys");
-const server = require("./server");
+const server = require("./api/server");
 // const credentials = require("./config/ssl");
 const https = require("https");
 const port = process.env.PORT || 443;
