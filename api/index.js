@@ -15,7 +15,6 @@ const city = require("./routes/city");
 const profile = require("./routes/profile");
 require("dotenv").config();
 const mongoose = require("mongoose");
-const keys = require("./config/keys");
 const https = require("https");
 const port = process.env.PORT || 443;
 
