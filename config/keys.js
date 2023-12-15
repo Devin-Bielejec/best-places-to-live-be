@@ -2,7 +2,7 @@
  
 module.exports = {
   mongodb: {
-    dbURI: `${process.env.MONGO_URI}`
+    dbURI: `${process.env.MONGODB_URI}`
   },
   session: {
     cookieKey: process.env.COOKIE_KEY
