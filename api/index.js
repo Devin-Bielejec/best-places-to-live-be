@@ -35,7 +35,7 @@ server.use(passport.initialize());
 server.use(passport.session());
 
 
-const passportConfig = require("./middleware/passportConfig")(passport);
+const passportConfig = require("../middleware/passportConfig")(passport);
 
 mongoose
   .connect(keys.mongodb.dbURI, {
