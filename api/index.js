@@ -13,6 +13,11 @@ const users = require("./routes/users");
 const auth = require("./routes/auth");
 const city = require("./routes/city");
 const profile = require("./routes/profile");
+require("dotenv").config();
+const mongoose = require("mongoose");
+const keys = require("./config/keys");
+const https = require("https");
+const port = process.env.PORT || 443;
 
 
 //Still not sure what keys are doing
@@ -33,6 +38,16 @@ server.use(passport.session());
 
 const passportConfig = require("./middleware/passportConfig")(passport);
 
+mongoose
+  .connect(keys.mongodb.dbURI, {
+    useNewUrlParser: true,
+    useFindAndModify: false,
+  })
+  .then(() => {
+    console.log("MongoDB successfully connected.");
+  })
+  .catch((e) => console.error(`Could not connect: ${e.message}`));
+
 //Routes
 server.use("/city", city);
 server.use("/users", users);
@@ -41,6 +56,10 @@ server.use("/profile", profile);
 //Informs devs that this is working
 server.get("/", (req, res) => {
   res.status(200).send("Let's Move Homie is a terrible name");
+});
+
+server.listen(port, () => {
+  console.log(`Server running on port ${port}`);
 });
 
 
