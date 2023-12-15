@@ -9,10 +9,10 @@ const session = require('express-session')
 const cookie = require("cookie-session");
 const cookieParser = require("cookie-parser");
 const bodyParser = require('body-parser')
-const users = require("./routes/users");
-const auth = require("./routes/auth");
-const city = require("./routes/city");
-const profile = require("./routes/profile");
+const users = require("../routes/users");
+const auth = require("../routes/auth");
+const city = require("../routes/city");
+const profile = require("../routes/profile");
 require("dotenv").config();
 const mongoose = require("mongoose");
 const https = require("https");
@@ -20,7 +20,7 @@ const port = process.env.PORT || 443;
 
 
 //Still not sure what keys are doing
-const keys = require("./config/keys");
+const keys = require("../config/keys");
 const server = express();
 
 server.use(helmet());
