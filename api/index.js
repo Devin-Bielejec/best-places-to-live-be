@@ -32,7 +32,8 @@ server.use(express.json());
 server.use(express.urlencoded({
   extended: true
 }));
-server.use(session({ secret: 'thisismysecret' }));
+server.use(session({ secret: 'thisismysecret', resave: true,
+saveUninitialized: true }));
 server.use(passport.initialize());
 server.use(passport.session());
 
