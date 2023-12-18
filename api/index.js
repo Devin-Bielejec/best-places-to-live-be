@@ -51,7 +51,7 @@ server.get("/", (req, res) => {
   res.status(200).send("Let's Move Homie is a terrible name");
 });
 
-mongoose.connect(process.env.mongodb_uri, {
+mongoose.connect(process.env.MONGODB_URI, {
   useNewUrlParser: true,
   useFindAndModify: false,
 });
