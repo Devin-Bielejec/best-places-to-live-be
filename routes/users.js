@@ -14,7 +14,7 @@ const tokenAuthentication = (req, res, next) => {
   jwt.verify(token, keys.jwtAuth.secret, (error, decodedToken) => {
     if (error) {
       res.status(403).json({
-        message: "Please login to continue."
+        message: "Please login to continue.",
       });
     } else {
       req.decodedToken = decodedToken;
@@ -37,7 +37,7 @@ const cityDoubleCheck = async (req, res, next) => {
   let found = false;
 
   const likedCity = {
-    _id: city_id
+    _id: city_id,
   };
 
   const user = await User.findOne({ _id });
@@ -62,7 +62,7 @@ const cityDoubleCheckDis = async (req, res, next) => {
   let found = false;
 
   const dislikedCity = {
-    _id: city_id
+    _id: city_id,
   };
 
   const user = await User.findOne({ _id });
@@ -132,16 +132,16 @@ router.get("/profile", tokenAuthentication, async (req, res) => {
         name: user.name,
         email: user.email,
         location: user.location,
-        cities: user.cities
+        cities: user.cities,
       });
     } else {
       res.status(400).json({
-        message: "User does not exist."
+        message: "User does not exist.",
       });
     }
   } catch (error) {
     res.status(500).json({
-      message: "Error retrieving user from database."
+      message: "Error retrieving user from database.",
     });
   }
 });
@@ -177,13 +177,13 @@ router.put("/profile", tokenAuthentication, async (req, res) => {
 
       const updatedUser = await User.findOneAndUpdate(
         {
-          _id
+          _id,
         },
         {
-          $set: userUpdates
+          $set: userUpdates,
         },
         {
-          new: true
+          new: true,
         }
       );
 
@@ -192,16 +192,16 @@ router.put("/profile", tokenAuthentication, async (req, res) => {
         name: updatedUser.name,
         email: updatedUser.email,
         location: updatedUser.location,
-        cities: updatedUser.cities
+        cities: updatedUser.cities,
       });
     } else {
       res.status(400).json({
-        message: "User does not exist."
+        message: "User does not exist.",
       });
     }
   } catch (error) {
     res.status(500).json({
-      message: "Error updating user in database."
+      message: "Error updating user in database.",
     });
   }
 });
@@ -222,16 +222,16 @@ router.get("/info", tokenAuthentication, async (req, res) => {
         cities: user.cities,
         likes: user.likes,
         dislikes: user.dislikes,
-        factors: user.factors
+        factors: user.factors,
       });
     } else {
       res.status(400).json({
-        message: "User does not exist."
+        message: "User does not exist.",
       });
     }
   } catch (error) {
     res.status(500).json({
-      message: "Error retrieving user from database."
+      message: "Error retrieving user from database.",
     });
   }
 });
@@ -248,7 +248,7 @@ router.post(
     const { city_id } = req.body;
 
     const likedCity = {
-      _id: city_id
+      _id: city_id,
     };
     try {
       const user = await User.findOne({ _id });
@@ -258,15 +258,15 @@ router.post(
 
         const updatedUser = await User.findOneAndUpdate(
           {
-            _id
+            _id,
           },
           {
             $set: {
-              likes: newLike
-            }
+              likes: newLike,
+            },
           },
           {
-            new: true
+            new: true,
           }
         );
         res.status(200).json({
@@ -275,16 +275,16 @@ router.post(
           email: updatedUser.email,
           likes: updatedUser.likes,
           dislikes: updatedUser.dislikes,
-          factors: updatedUser.factors
+          factors: updatedUser.factors,
         });
       } else {
         res.status(400).json({
-          message: "User does not exist."
+          message: "User does not exist.",
         });
       }
     } catch (error) {
       res.status(500).json({
-        message: "Error retrieving user from database."
+        message: "Error retrieving user from database.",
       });
     }
   }
@@ -296,18 +296,18 @@ router.delete("/likes", tokenAuthentication, async (req, res) => {
   try {
     const user = await User.findOne({ _id });
     if (user) {
-      const newLikes = [...user.likes].filter(city => city._id != city_id);
+      const newLikes = [...user.likes].filter((city) => city._id != city_id);
       const updatedUser = await User.findOneAndUpdate(
         {
-          _id
+          _id,
         },
         {
           $set: {
-            likes: newLikes
-          }
+            likes: newLikes,
+          },
         },
         {
-          new: true
+          new: true,
         }
       );
       res.status(200).json({
@@ -316,16 +316,16 @@ router.delete("/likes", tokenAuthentication, async (req, res) => {
         email: updatedUser.email,
         likes: updatedUser.likes,
         dislikes: updatedUser.dislikes,
-        factors: updatedUser.factors
+        factors: updatedUser.factors,
       });
     } else {
       res.status(400).json({
-        message: "User does not exist."
+        message: "User does not exist.",
       });
     }
   } catch (error) {
     res.status(500).json({
-      message: "Error retrieving user from database."
+      message: "Error retrieving user from database.",
     });
   }
 });
@@ -344,7 +344,7 @@ router.post(
     const { city_id } = req.body;
 
     const dislikedCity = {
-      _id: city_id
+      _id: city_id,
     };
     try {
       const user = await User.findOne({ _id });
@@ -355,15 +355,15 @@ router.post(
 
         const updatedUser = await User.findOneAndUpdate(
           {
-            _id
+            _id,
           },
           {
             $set: {
-              dislikes: newDislike
-            }
+              dislikes: newDislike,
+            },
           },
           {
-            new: true
+            new: true,
           }
         );
         res.status(200).json({
@@ -372,16 +372,16 @@ router.post(
           email: updatedUser.email,
           likes: updatedUser.likes,
           dislikes: updatedUser.dislikes,
-          factors: updatedUser.factors
+          factors: updatedUser.factors,
         });
       } else {
         res.status(400).json({
-          message: "User does not exist."
+          message: "User does not exist.",
         });
       }
     } catch (error) {
       res.status(500).json({
-        message: "Error retrieving user from database."
+        message: "Error retrieving user from database.",
       });
     }
   }
@@ -394,19 +394,19 @@ router.delete("/dislikes", tokenAuthentication, async (req, res) => {
     const user = await User.findOne({ _id });
     if (user) {
       const newDislikes = [...user.dislikes].filter(
-        city => city._id != city_id
+        (city) => city._id != city_id
       );
       const updatedUser = await User.findOneAndUpdate(
         {
-          _id
+          _id,
         },
         {
           $set: {
-            dislikes: newDislikes
-          }
+            dislikes: newDislikes,
+          },
         },
         {
-          new: true
+          new: true,
         }
       );
       res.status(200).json({
@@ -415,16 +415,16 @@ router.delete("/dislikes", tokenAuthentication, async (req, res) => {
         email: updatedUser.email,
         likes: updatedUser.likes,
         dislikes: updatedUser.dislikes,
-        factors: updatedUser.factors
+        factors: updatedUser.factors,
       });
     } else {
       res.status(400).json({
-        message: "User does not exist."
+        message: "User does not exist.",
       });
     }
   } catch (error) {
     res.status(500).json({
-      message: "Error retrieving user from database."
+      message: "Error retrieving user from database.",
     });
   }
 });
@@ -448,15 +448,15 @@ router.post(
 
         const updatedUser = await User.findOneAndUpdate(
           {
-            _id
+            _id,
           },
           {
             $set: {
-              factors: newFactors
-            }
+              factors: newFactors,
+            },
           },
           {
-            new: true
+            new: true,
           }
         );
         res.status(200).json({
@@ -465,16 +465,16 @@ router.post(
           email: updatedUser.email,
           likes: updatedUser.likes,
           dislikes: updatedUser.dislikes,
-          factors: updatedUser.factors
+          factors: updatedUser.factors,
         });
       } else {
         res.status(400).json({
-          message: "User does not exist."
+          message: "User does not exist.",
         });
       }
     } catch (error) {
       res.status(500).json({
-        message: "Error retrieving user from database."
+        message: "Error retrieving user from database.",
       });
     }
   }
@@ -487,19 +487,19 @@ router.delete("/factors", tokenAuthentication, async (req, res) => {
     const user = await User.findOne({ _id });
     if (user) {
       const newFactors = [...user.factors].filter(
-        factors => factors !== delFactor
+        (factors) => factors !== delFactor
       );
       const updatedUser = await User.findOneAndUpdate(
         {
-          _id
+          _id,
         },
         {
           $set: {
-            factors: newFactors
-          }
+            factors: newFactors,
+          },
         },
         {
-          new: true
+          new: true,
         }
       );
       res.status(200).json({
@@ -508,16 +508,16 @@ router.delete("/factors", tokenAuthentication, async (req, res) => {
         email: updatedUser.email,
         likes: updatedUser.likes,
         dislikes: updatedUser.dislikes,
-        factors: updatedUser.factors
+        factors: updatedUser.factors,
       });
     } else {
       res.status(400).json({
-        message: "User does not exist."
+        message: "User does not exist.",
       });
     }
   } catch (error) {
     res.status(500).json({
-      message: "Error retrieving user from database."
+      message: "Error retrieving user from database.",
     });
   }
 });
@@ -535,15 +535,15 @@ router.put(
       if (user) {
         const updatedUser = await User.findOneAndUpdate(
           {
-            _id
+            _id,
           },
           {
             $set: {
-              factors: putFactors
-            }
+              factors: putFactors,
+            },
           },
           {
-            new: true
+            new: true,
           }
         );
         res.status(200).json({
@@ -552,16 +552,16 @@ router.put(
           email: updatedUser.email,
           likes: updatedUser.likes,
           dislikes: updatedUser.dislikes,
-          factors: updatedUser.factors
+          factors: updatedUser.factors,
         });
       } else {
         res.status(400).json({
-          message: "User does not exist."
+          message: "User does not exist.",
         });
       }
     } catch (error) {
       res.status(500).json({
-        message: "Error retrieving user from database."
+        message: "Error retrieving user from database.",
       });
     }
   }
@@ -576,7 +576,7 @@ router.post("/profile/cities", tokenAuthentication, async (req, res) => {
   const city = {
     _id: city_id,
     name: city_name,
-    photo: city_photo
+    photo: city_photo,
   };
   try {
     const user = await User.findOne({ _id });
@@ -586,31 +586,31 @@ router.post("/profile/cities", tokenAuthentication, async (req, res) => {
 
       const updatedUser = await User.findOneAndUpdate(
         {
-          _id
+          _id,
         },
         {
           $set: {
-            cities: newCities
-          }
+            cities: newCities,
+          },
         },
         {
-          new: true
+          new: true,
         }
       );
       res.status(200).json({
         _id: updatedUser._id,
         name: updatedUser.name,
         email: updatedUser.email,
-        cities: updatedUser.cities
+        cities: updatedUser.cities,
       });
     } else {
       res.status(400).json({
-        message: "User does not exist."
+        message: "User does not exist.",
       });
     }
   } catch (error) {
     res.status(500).json({
-      message: "Error retrieving user from database."
+      message: "Error retrieving user from database.",
     });
   }
 });
@@ -622,34 +622,34 @@ router.delete("/profile/cities", tokenAuthentication, async (req, res) => {
     const user = await User.findOne({ _id });
 
     if (user) {
-      const newCities = [...user.cities].filter(city => city._id !== city_id);
+      const newCities = [...user.cities].filter((city) => city._id !== city_id);
       const updatedUser = await User.findOneAndUpdate(
         {
-          _id
+          _id,
         },
         {
           $set: {
-            cities: newCities
-          }
+            cities: newCities,
+          },
         },
         {
-          new: true
+          new: true,
         }
       );
       res.status(200).json({
         _id: updatedUser._id,
         name: updatedUser.name,
         email: updatedUser.email,
-        cities: updatedUser.cities
+        cities: updatedUser.cities,
       });
     } else {
       res.status(400).json({
-        message: "User does not exist."
+        message: "User does not exist.",
       });
     }
   } catch (error) {
     res.status(500).json({
-      message: "Error retrieving user from database."
+      message: "Error retrieving user from database.",
     });
   }
 });
@@ -660,7 +660,7 @@ router.post("/login", async (req, res) => {
   // check required fields
   if (!email || !password) {
     res.status(400).json({
-      message: "Please fill in all fields."
+      message: "Please fill in all fields.",
     });
   }
   try {
@@ -672,9 +672,9 @@ router.post("/login", async (req, res) => {
           {
             _id: user._id,
             name: user.name,
-            email: user.email
+            email: user.email,
           },
-          keys.jwtAuth.secret,
+          process.env.JWT_SECRET,
           { expiresIn: "24h" }
         );
         res.status(200).json({
@@ -686,21 +686,21 @@ router.post("/login", async (req, res) => {
           token,
           likes: user.likes,
           dislikes: user.dislikes,
-          factors: user.factors
+          factors: user.factors,
         });
       } else {
         res.status(500).json({
-          message: "Invalid password"
+          message: "Invalid password",
         });
       }
     } else {
       res.status(400).json({
-        message: "User not found."
+        message: "User not found.",
       });
     }
   } catch (error) {
     res.status(500).json({
-      message: "Error logging in."
+      message: "Error logging in.",
     });
   }
 });
@@ -711,7 +711,7 @@ router.post("/signin", async (req, res) => {
   // check required fields
   if (!appleId || !password) {
     res.status(400).json({
-      message: "Please fill in all fields."
+      message: "Please fill in all fields.",
     });
   }
   try {
@@ -723,9 +723,9 @@ router.post("/signin", async (req, res) => {
           {
             _id: user._id,
             name: user.name,
-            appleId: user.appleId
+            appleId: user.appleId,
           },
-          keys.jwtAuth.secret,
+          process.env.JWT_SECRET,
           { expiresIn: "24h" }
         );
         res.status(200).json({
@@ -734,21 +734,21 @@ router.post("/signin", async (req, res) => {
           email: user.email,
           appleId: user.appleId,
           location: user.location,
-          token
+          token,
         });
       } else {
         res.status(500).json({
-          message: "Invalid password"
+          message: "Invalid password",
         });
       }
     } else {
       res.status(400).json({
-        message: "User not found."
+        message: "User not found.",
       });
     }
   } catch (error) {
     res.status(500).json({
-      message: "Error logging in."
+      message: "Error logging in.",
     });
   }
 });
@@ -759,18 +759,18 @@ router.post("/signup", async (req, res) => {
   const { name, email, password, location, appleId } = req.body;
   if (!name || !email || !password || !location || !appleId) {
     res.status(400).json({
-      message: "Please fill in all fields."
+      message: "Please fill in all fields.",
     }); // check pass length
   } else if (password.length < 6) {
     res.status(500).json({
-      message: "Password must be at least 6 characters"
+      message: "Password must be at least 6 characters",
     });
   } else {
     try {
       const user = await User.findOne({ appleId });
       if (user) {
         res.status(500).json({
-          message: "User already exists. Please login to continue"
+          message: "User already exists. Please login to continue",
         });
       } else {
         const hashedPassword = bcrypt.hashSync(password, 4);
@@ -779,7 +779,7 @@ router.post("/signup", async (req, res) => {
           email,
           appleId,
           location,
-          password: hashedPassword
+          password: hashedPassword,
         });
         const userSaved = await newUser.save();
         const token = jwt.sign(
@@ -788,9 +788,9 @@ router.post("/signup", async (req, res) => {
             name: userSaved.name,
             email: userSaved.email,
             appleId: userSaved.appleId,
-            location: userSaved.location
+            location: userSaved.location,
           },
-          keys.jwtAuth.secret,
+          process.env.JWT_SECRET,
           { expiresIn: "24h" }
         );
         res.status(200).json({
@@ -799,12 +799,12 @@ router.post("/signup", async (req, res) => {
           email: userSaved.email,
           appleId: userSaved.appleId,
           location: userSaved.location,
-          token
+          token,
         });
       }
     } catch (error) {
       res.status(500).json({
-        message: "Error registering."
+        message: "Error registering.",
       });
     }
   }
@@ -816,19 +816,19 @@ router.post("/register", async (req, res) => {
   const { name, email, password, location } = req.body;
   if (!name || !email || !password || !location) {
     res.status(400).json({
-      message: "Please fill in all fields."
+      message: "Please fill in all fields.",
     });
     // check pass length
   } else if (password.length < 6) {
     res.status(500).json({
-      message: "Password must be at least 6 characters"
+      message: "Password must be at least 6 characters",
     });
   } else {
     try {
       const user = await User.findOne({ email });
       if (user) {
         res.status(500).json({
-          message: "User already exists. Please login to continue"
+          message: "User already exists. Please login to continue",
         });
       } else {
         const hashedPassword = bcrypt.hashSync(password, 4);
@@ -837,7 +837,7 @@ router.post("/register", async (req, res) => {
           name,
           email,
           location,
-          password: hashedPassword
+          password: hashedPassword,
         });
         const userSaved = await newUser.save();
 
@@ -846,9 +846,9 @@ router.post("/register", async (req, res) => {
             _id: userSaved._id,
             name: userSaved.name,
             email: userSaved.email,
-            location: userSaved.location
+            location: userSaved.location,
           },
-          keys.jwtAuth.secret,
+          process.env.JWT_SECRET,
           { expiresIn: "24h" }
         );
         res.status(200).json({
@@ -859,12 +859,13 @@ router.post("/register", async (req, res) => {
           token,
           likes: userSaved.likes,
           dislikes: userSaved.dislikes,
-          factors: userSaved.factors
+          factors: userSaved.factors,
         });
       }
     } catch (error) {
+      console.log(error);
       res.status(500).json({
-        message: "Error registering."
+        message: "Error registering.",
       });
     }
   }
