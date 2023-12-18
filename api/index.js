@@ -8,7 +8,6 @@ const session = require('express-session')
 //Plan is to have this better organized to my liking by v5
 const cookie = require("cookie-session");
 const cookieParser = require("cookie-parser");
-const bodyParser = require('body-parser')
 const users = require("../routes/users");
 const auth = require("../routes/auth");
 const city = require("../routes/city");
@@ -29,8 +28,11 @@ server.use(cors());
 
 server.use(express.static(__dirname, { dotfiles: "allow" }));
 server.use(cookieParser());
- server.use(bodyParser());
- server.use(session({ secret: 'thisismysecret' }));
+server.use(express.json());
+server.use(express.urlencoded({
+  extended: true
+}));
+server.use(session({ secret: 'thisismysecret' }));
 server.use(passport.initialize());
 server.use(passport.session());
 
