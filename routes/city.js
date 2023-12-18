@@ -9,10 +9,10 @@ const axios = require("axios");
 const tokenAuthentication = (req, res, next) => {
   const token = req.headers.authorization;
 
-  jwt.verify(token, keys.jwtAuth.secret, (error, decodedToken) => {
+  jwt.verify(token, process.env.JWT_SECRET, (error, decodedToken) => {
     if (error) {
       res.status(403).json({
-        message: "Please login to continue."
+        message: "Please login to continue.",
       });
     } else {
       req.decodedToken = decodedToken;
@@ -25,11 +25,11 @@ router.get("/all", async (req, res) => {
   try {
     const cities = await City.find({}, { name: 1, secure_url: 1 });
     res.status(200).json({
-      cities
+      cities,
     });
   } catch (error) {
     res.status(500).json({
-      message: "Error retrieving cities from database."
+      message: "Error retrieving cities from database.",
     });
   }
 });
@@ -48,25 +48,25 @@ router.post("/location", async (req, res) => {
             $geoNear: {
               near: { type: "Point", coordinates: [lng, lat] },
               spherical: true,
-              distanceField: "calcDistance"
-            }
+              distanceField: "calcDistance",
+            },
           },
-          { $sample: { size: limit } }
+          { $sample: { size: limit } },
         ]).limit(limit)
       : await City.find({
           location: {
             $near: {
               $geometry: { type: "Point", coordinates: [lng, lat] }, //yes this is right
-              $maxDistance: parseInt((50000 * 10) / zoom)
-            }
-          }
+              $maxDistance: parseInt((50000 * 10) / zoom),
+            },
+          },
         }).limit(limit);
 
   let data = [];
   if (req.body && req.body.model) {
-    cities.map(c => {
+    cities.map((c) => {
       let d = {};
-      Object.keys(req.body.model).map(k => (d[k] = c[k]));
+      Object.keys(req.body.model).map((k) => (d[k] = c[k]));
       data.push(d);
     });
   } else data = cities;
@@ -75,7 +75,7 @@ router.post("/location", async (req, res) => {
       .status(200)
       .json({ message: "There are no cities in this area" });
   res.status(200).json({
-    data
+    data,
   });
 });
 
@@ -102,18 +102,18 @@ router.post("/spec-location", tokenAuthentication, async (req, res) => {
             $geoNear: {
               near: { type: "Point", coordinates: [lng, lat] },
               spherical: true,
-              distanceField: "calcDistance"
-            }
+              distanceField: "calcDistance",
+            },
           },
-          { $sample: { size: limit } }
+          { $sample: { size: limit } },
         ]).limit(limit)
       : await City.find({
           location: {
             $near: {
               $geometry: { type: "Point", coordinates: [lng, lat] }, //yes this is right
-              $maxDistance: parseInt((50000 * 10) / zoom)
-            }
-          }
+              $maxDistance: parseInt((50000 * 10) / zoom),
+            },
+          },
         }).limit(limit);
 
   if (disID.length != 0) {
@@ -122,12 +122,12 @@ router.post("/spec-location", tokenAuthentication, async (req, res) => {
 
     for (var i = 0; i < disID.length; i++) {
       if (i == 0) {
-        exitData = cities.filter(function(city) {
+        exitData = cities.filter(function (city) {
           return city._id != `${disID[i]}`;
         });
       } else {
         filteredSearch = exitData;
-        exitData = exitData.filter(function(city) {
+        exitData = exitData.filter(function (city) {
           return city._id != `${disID[i]}`;
         });
       }
@@ -138,9 +138,9 @@ router.post("/spec-location", tokenAuthentication, async (req, res) => {
 
   let data = [];
   if (req.body && req.body.model) {
-    exitData.map(c => {
+    exitData.map((c) => {
       let d = {};
-      Object.keys(req.body.model).map(k => (d[k] = c[k]));
+      Object.keys(req.body.model).map((k) => (d[k] = c[k]));
       data.push(d);
     });
   } else data = exitData;
@@ -148,12 +148,12 @@ router.post("/spec-location", tokenAuthentication, async (req, res) => {
     if (disID.length < 0) {
       res.status(200).json({
         founded: false,
-        message: "There are no cities in this area"
+        message: "There are no cities in this area",
       });
     } else {
       res.status(200).json({
         founded: false,
-        message: "No results after filering"
+        message: "No results after filering",
       });
     }
   } else {
@@ -162,9 +162,9 @@ router.post("/spec-location", tokenAuthentication, async (req, res) => {
       results: [
         { wasFiltered: cities.length - exitData.length },
         { beforeFilter: cities.length },
-        { afterFilter: exitData.length }
+        { afterFilter: exitData.length },
       ],
-      data
+      data,
     });
   }
 });
@@ -179,18 +179,18 @@ router.post("/", async (req, res) => {
     const cities = await City.find(filter);
     let data = [];
     if (req.body && req.body.model) {
-      cities.map(c => {
+      cities.map((c) => {
         let d = {};
-        Object.keys(req.body.model).map(k => (d[k] = c[k]));
+        Object.keys(req.body.model).map((k) => (d[k] = c[k]));
         data.push(d);
       });
     } else data = cities;
     res.status(200).json({
-      data
+      data,
     });
   } catch (error) {
     res.status(500).json({
-      message: "Could Not find this data in the data base"
+      message: "Could Not find this data in the data base",
     });
   }
 });
@@ -205,17 +205,17 @@ router.delete("/", async (req, res) => {
     ) {
       await City.remove();
       res.status(200).json({
-        message: "hello"
+        message: "hello",
       });
     } else throw "You SHALL NOT PASS";
   } catch (error) {
     res.status(200).json({
-      message: "good bye"
+      message: "good bye",
     });
   }
 });
 
-router.post("/top", async function(req, res) {
+router.post("/top", async function (req, res) {
   try {
     let q = req.query.q ? req.query.q : null;
     let filter = req.query.filter ? req.query.filter : "score_total";
@@ -235,26 +235,26 @@ router.post("/top", async function(req, res) {
     const cities = await City.find(query)
       .sort({
         ...qsort,
-        name: 1
+        name: 1,
       })
       .limit(limit);
 
     //check for model
     let data = [];
     if (req.body && req.body.model) {
-      cities.map(c => {
+      cities.map((c) => {
         let d = {};
-        Object.keys(req.body.model).map(k => (d[k] = c[k]));
+        Object.keys(req.body.model).map((k) => (d[k] = c[k]));
         data.push(d);
       });
     } else data = cities;
 
     res.status(200).json({
-      cities: data
+      cities: data,
     });
   } catch (error) {
     res.status(500).json({
-      message: "Could not retrieve top 10 cities"
+      message: "Could not retrieve top 10 cities",
     });
   }
 });
@@ -263,16 +263,16 @@ router.get("/topten-score_total", async (req, res) => {
   try {
     const sortedByAverageCommuteTime_ASC = await City.find()
       .sort({
-        score_total: -1
+        score_total: -1,
       })
       .limit(10);
 
     res.status(200).json({
-      cities: sortedByAverageCommuteTime_ASC
+      cities: sortedByAverageCommuteTime_ASC,
     });
   } catch (error) {
     res.status(500).json({
-      message: "Could not retrieve top 10 cities of average commute time."
+      message: "Could not retrieve top 10 cities of average commute time.",
     });
   }
 });
@@ -283,21 +283,21 @@ router.post("/search", async (req, res) => {
 
   try {
     const searchResults = await City.find({
-      $text: { $search: `\"${searchTerm}\"` }
+      $text: { $search: `\"${searchTerm}\"` },
     }).limit(limit);
 
     if (searchResults.length) {
       res.status(200).json({
-        cities: searchResults
+        cities: searchResults,
       });
     } else {
       res.status(404).json({
-        message: "Could not find any cities with that name."
+        message: "Could not find any cities with that name.",
       });
     }
   } catch (error) {
     res.status(500).json({
-      message: "Error searching cities in our database."
+      message: "Error searching cities in our database.",
     });
   }
 });
@@ -316,7 +316,7 @@ router.post("/spec-search", tokenAuthentication, async (req, res) => {
     }
 
     const searchResults = await City.find({
-      $text: { $search: `\"${searchTerm}\"` }
+      $text: { $search: `\"${searchTerm}\"` },
     }).limit(limit);
 
     if (disID.length != 0) {
@@ -325,12 +325,12 @@ router.post("/spec-search", tokenAuthentication, async (req, res) => {
 
       for (var i = 0; i < disID.length; i++) {
         if (i == 0) {
-          exitData = searchResults.filter(function(city) {
+          exitData = searchResults.filter(function (city) {
             return city._id != `${disID[i]}`;
           });
         } else {
           filteredSearch = exitData;
-          exitData = exitData.filter(function(city) {
+          exitData = exitData.filter(function (city) {
             return city._id != `${disID[i]}`;
           });
         }
@@ -345,24 +345,24 @@ router.post("/spec-search", tokenAuthentication, async (req, res) => {
         results: [
           { wasFiltered: searchResults.length - exitData.length },
           { beforeFilter: searchResults.length },
-          { afterFilter: exitData.length }
+          { afterFilter: exitData.length },
         ],
-        cities: exitData
+        cities: exitData,
       });
     } else if (!searchResults.length) {
       res.status(404).json({
         founded: false,
-        message: "Could not find any cities with that name."
+        message: "Could not find any cities with that name.",
       });
     } else {
       res.status(200).json({
         founded: false,
-        message: "Results was filtered and empty or no results."
+        message: "Results was filtered and empty or no results.",
       });
     }
   } catch (error) {
     res.status(500).json({
-      message: "Error searching cities in our database."
+      message: "Error searching cities in our database.",
     });
   }
 });
@@ -373,26 +373,25 @@ router.post("/", async (req, res) => {
   const newCity = new City({
     name,
     cost_of_living,
-    avg_commute_time
+    avg_commute_time,
   });
 
   try {
     const citySaved = await newCity.save();
 
     res.status(200).json({
-      citySaved
+      citySaved,
     });
   } catch (error) {
     res.status(500).json({
-      message: "Error saving new city in database."
+      message: "Error saving new city in database.",
     });
   }
 });
 
-router.post("/ds",async (req, res) => {
+router.post("/ds", async (req, res) => {
   const input = req.body;
   let limit = req.query.limit ? parseInt(req.query.limit) : 20;
-  
 
   // fetching data from DS API
   async function getUser(inputData) {
@@ -415,17 +414,17 @@ router.post("/ds",async (req, res) => {
   try {
     if (result) {
       res.status(200).json({
-        result
+        result,
       });
     } else {
       res.status(400).json({
         message:
-          "The browser (or proxy) sent a request that this server could not understand."
+          "The browser (or proxy) sent a request that this server could not understand.",
       });
     }
   } catch (error) {
     res.status(500).json({
-      message: "Error with fetching data from DS server"
+      message: "Error with fetching data from DS server",
     });
   }
 });
@@ -439,7 +438,7 @@ router.post("/visual", async (req, res) => {
         method: "post",
         url: "https://best-places-to-live-ds-leo-dunns-projects.vercel.app/visual",
         data: inputData,
-        responseType: "arraybuffer"
+        responseType: "arraybuffer",
       });
 
       return response.data;
@@ -452,18 +451,18 @@ router.post("/visual", async (req, res) => {
     if (result) {
       res.writeHead(200, {
         "Content-Type": "image/png",
-        "Content-Length": result.length
+        "Content-Length": result.length,
       });
       res.end(result, "binary");
     } else {
       res.status(400).json({
         message:
-          "The browser (or proxy) sent a request that this server could not understand."
+          "The browser (or proxy) sent a request that this server could not understand.",
       });
     }
   } catch (error) {
     res.status(500).json({
-      message: "Error with fetching data from DS server"
+      message: "Error with fetching data from DS server",
     });
   }
 });
@@ -502,12 +501,12 @@ router.post("/spec-ds", tokenAuthentication, async (req, res) => {
 
       for (var i = 0; i < disID.length; i++) {
         if (i == 0) {
-          exitData = resultPoint.filter(function(city) {
+          exitData = resultPoint.filter(function (city) {
             return city._id != `${disID[i]}`;
           });
         } else {
           filteredSearch = exitData;
-          exitData = exitData.filter(function(city) {
+          exitData = exitData.filter(function (city) {
             return city._id != `${disID[i]}`;
           });
         }
@@ -524,39 +523,41 @@ router.post("/spec-ds", tokenAuthentication, async (req, res) => {
         results: [
           { wasFiltered: resultPoint.length - exitData.length },
           { beforeFilter: resultPoint.length },
-          { afterFilter: exitData.length }
+          { afterFilter: exitData.length },
         ],
-        final
+        final,
       });
     } else {
       res.status(400).json({
         founded: false,
         message:
-          "The browser (or proxy) sent a request that this server could not understand."
+          "The browser (or proxy) sent a request that this server could not understand.",
       });
     }
   } catch (error) {
     res.status(500).json({
       founded: false,
-      message: "Error with fetching data from DS server"
+      message: "Error with fetching data from DS server",
     });
   }
 });
 
 router.get("/jobs", async (req, res) => {
-  const input = req.query; 
-   // check required field
-  if(!Object.keys(input).length){
+  const input = req.query;
+  // check required field
+  if (!Object.keys(input).length) {
     res.status(400).json({
-      message: "Please pass at least one req params l=location, q=quries(Eg: Software), country=country"
+      message:
+        "Please pass at least one req params l=location, q=quries(Eg: Software), country=country",
     });
   }
-   // fetching data from other API
+  // fetching data from other API
   async function getJobs(params) {
     try {
       const response = await axios.get(
-        `https://indreed.herokuapp.com/api/jobs`, {
-          params
+        `https://indreed.herokuapp.com/api/jobs`,
+        {
+          params,
         }
       );
       return response.data;
@@ -567,18 +568,17 @@ router.get("/jobs", async (req, res) => {
   try {
     if (result) {
       res.status(200).json({
-        result
+        result,
       });
     } else {
       res.status(400).json({
         message:
-          "The browser (or proxy) sent a request that this server could not understand."
+          "The browser (or proxy) sent a request that this server could not understand.",
       });
     }
   } catch (error) {
     res.status(500).json({
-
-      message: "Error with fetching data from API"
+      message: "Error with fetching data from API",
     });
   }
 });
